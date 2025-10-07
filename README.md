@@ -10,7 +10,7 @@ Proyek ini juga menampilkan berbagai **visualisasi data**, seperti distribusi ko
 
 ## 📂 Dataset
 
-Dataset yang digunakan: https://raw.githubusercontent.com/rizalespe/Dataset-Sentimen-Analisis-Bahasa-Indonesia/master/dataset_komentar_instagram_cyberbullying.csv
+Dataset yang digunakan:
 
 ```
 dataset_komentar_instagram_cyberbullying.csv

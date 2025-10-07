@@ -1,54 +1,101 @@
-# 📊 Analisis Sentimen Komentar Instagram untuk Deteksi Cyberbullying
+# 🧠 Analisis Sentimen Komentar Instagram Menggunakan NLP
 
-**Dataset**: [Dataset Komentar Instagram - Cyberbullying](https://raw.githubusercontent.com/rizalespe/Dataset-Sentimen-Analisis-Bahasa-Indonesia/master/dataset_komentar_instagram_cyberbullying.csv)  
+Proyek ini berfokus pada **analisis sentimen komentar Instagram** menggunakan pendekatan **Natural Language Processing (NLP)**. Dataset yang digunakan berisi komentar dengan label **positif** dan **negatif**, yang merepresentasikan opini pengguna terhadap suatu topik atau akun.
 
----
+Tahapan utama dalam proyek ini meliputi **pembersihan teks (text preprocessing)** seperti *lowercasing*, penghapusan tanda baca, tokenisasi, *stopword removal*, dan *stemming* menggunakan **Sastrawi**. Setelah teks dibersihkan, data direpresentasikan menggunakan **Bag of Words (BoW)** agar dapat dianalisis lebih lanjut.
 
-## 📖 Deskripsi
-
-Proyek ini bertujuan untuk menganalisis sentimen komentar pada platform media sosial, khususnya Instagram, untuk mendeteksi kemungkinan adanya **cyberbullying**. Dataset yang digunakan mencakup komentar dalam Bahasa Indonesia yang diambil dari platform Instagram dan diklasifikasikan berdasarkan sentimen, yaitu apakah komentar tersebut mengandung unsur cyberbullying atau tidak.
-
-Analisis ini diharapkan dapat membantu dalam pengembangan model deteksi cyberbullying, yang dapat digunakan oleh platform media sosial atau pihak terkait untuk memantau dan menangani kasus cyberbullying dengan lebih efektif.
+Proyek ini juga menampilkan berbagai **visualisasi data**, seperti distribusi komentar positif dan negatif, serta kata yang paling sering muncul di setiap kategori. Hasil analisis ini diharapkan dapat memberikan gambaran umum mengenai opini publik di media sosial.
 
 ---
 
-## 📂 Struktur Dataset
+## 📂 Dataset
 
-Dataset terdiri dari kolom-kolom berikut:
+Dataset yang digunakan:
 
-- **Komentar**: Teks komentar dalam Bahasa Indonesia yang diambil dari Instagram.
-- **Label**: Kategori atau kelas sentimen dari komentar, yang menunjukkan apakah komentar tersebut tergolong cyberbullying atau bukan.
+```
+dataset_komentar_instagram_cyberbullying.csv
+```
 
-Label terdiri dari dua kategori utama:
-- **Bullying**: Komentar yang mengandung unsur cyberbullying.
-- **Non-Bullying**: Komentar yang tidak mengandung unsur cyberbullying.
+Berisi dua kolom utama:
 
----
-
-## 🔍 Metodologi
-
-1. **Preprocessing Data**  
-   - *Text Cleaning*: Menghapus tanda baca, angka, dan karakter yang tidak relevan dari teks.
-   - *Tokenization*: Memisahkan teks menjadi kata-kata individu (token) untuk memudahkan analisis.
-   - *Stopword Removal*: Menghapus kata-kata umum (seperti "dan", "yang", dll.) yang tidak memberikan informasi penting untuk deteksi sentimen.
-   - *Stemming*: Mengonversi kata ke bentuk dasarnya untuk mengurangi jumlah kata yang perlu dianalisis.
-
-2. **Algoritma Klasifikasi**  
-   Berbagai model klasifikasi dapat digunakan untuk menganalisis sentimen pada dataset ini, seperti:
-   - **Naive Bayes**: Sering digunakan dalam analisis teks dan memberikan hasil yang baik pada klasifikasi sentimen.
-   - **Support Vector Machine (SVM)**: Algoritma kuat yang cocok untuk klasifikasi teks dengan data biner.
-   - **Random Forest**: Algoritma berbasis pohon yang dapat digunakan untuk klasifikasi sentimen dengan kinerja yang cukup baik.
-
-3. **Evaluasi Model**  
-   Menggunakan metrik seperti akurasi, presisi, recall, dan F1-score untuk menilai kinerja model dalam mendeteksi komentar yang mengandung cyberbullying.
+* `comment` → teks komentar dari pengguna
+* `label` → kategori sentimen (`positive` atau `negative`)
 
 ---
 
-## 🚀 Cara Menggunakan
+## ⚙️ Instalasi dan Dependensi
 
-1. **Download** dataset dari URL berikut: [Dataset Komentar Instagram - Cyberbullying](https://raw.githubusercontent.com/rizalespe/Dataset-Sentimen-Analisis-Bahasa-Indonesia/master/dataset_komentar_instagram_cyberbullying.csv).
-2. **Lakukan Preprocessing** pada teks menggunakan teknik yang telah dijelaskan di atas.
-3. **Latih Model Klasifikasi** menggunakan algoritma pilihan Anda untuk mendeteksi komentar yang termasuk dalam kategori cyberbullying.
-4. **Evaluasi Hasil** untuk menilai akurasi dan performa model dalam mendeteksi komentar yang mengandung cyberbullying.
+Sebelum menjalankan notebook, pastikan semua dependensi berikut sudah terinstal:
+
+```bash
+pip install contractions
+pip install Sastrawi
+pip install nltk
+pip install seaborn
+pip install scikit-learn
+pip install pandas
+pip install matplotlib
+```
+
+Atau langsung jalankan di notebook:
+
+```python
+!pip install contractions
+!pip install Sastrawi
+```
+
+---
+
+## 🧹 Tahapan Preprocessing
+
+Langkah-langkah utama pembersihan teks:
+
+1. **Lowercasing** → mengubah seluruh teks menjadi huruf kecil.
+2. **Menghapus tanda baca dan angka** → agar teks lebih bersih.
+3. **Tokenization** → memecah kalimat menjadi kata-kata.
+4. **Stopword Removal** → menghapus kata umum yang tidak bermakna penting.
+5. **Stemming (Sastrawi)** → mengubah kata ke bentuk dasarnya.
+
+Contoh fungsi pembersihan teks:
+
+```python
+def clean_text(text):
+    text = text.lower()
+    text = re.sub(r'[^a-z\s]', '', text)
+    tokens = word_tokenize(text)
+    tokens = [stemmer.stem(word) for word in tokens if word not in stopwords]
+    return ' '.join(tokens)
+```
+
+---
+
+## 🧮 Representasi Teks
+
+Teks yang telah dibersihkan diubah menjadi representasi numerik menggunakan **Bag of Words (BoW)**:
+
+```python
+from sklearn.feature_extraction.text import CountVectorizer
+
+vectorizer = CountVectorizer()
+X = vectorizer.fit_transform(df_comments['cleaned_text'])
+```
+
+---
+
+## 📊 Visualisasi
+
+Beberapa visualisasi yang dihasilkan:
+
+* Distribusi komentar positif dan negatif
+* Frekuensi kata terbanyak per kategori
+* Word frequency analysis dengan Matplotlib dan Seaborn
+
+Contoh visualisasi:
+
+```python
+sns.countplot(x='label', data=df_comments)
+plt.title('Distribusi Sentimen Komentar Instagram')
+plt.show()
+```
 
 ---
